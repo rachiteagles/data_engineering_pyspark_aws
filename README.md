@@ -17,7 +17,7 @@
 
 ## File Structure
 
-.
+```
 │── lambda/
 │   │── trigger_emr.py  # Lambda function to trigger EMR job on S3 file drop
 │   │── monitor_emr.py   # Lambda function to monitor EMR job status
@@ -35,3 +35,4 @@
 │    │── input_9.csv
 │    │── input_10.csv
 │── README.md
+```
