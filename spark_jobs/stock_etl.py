@@ -20,7 +20,7 @@ S3_PATH = f"s3://{S3_BUCKET}/stocks/"
 JDBC_URL = "jdbc:postgresql://your-rds-endpoint:5432/yourdb"
 DB_PROPERTIES = {"user": "your-user", "password": "your-password", "driver": "org.postgresql.Driver"}
 
-# Define Schema
+# Define Schema. Schema definition avoids Spark’s automatic inference, reducing overhead.
 schema = StructType([
     StructField("date", DateType(), True),
     StructField("id", IntegerType(), True),
@@ -32,13 +32,13 @@ schema = StructType([
 df = spark.read.option("header", True).option("mode", "PERMISSIVE").schema(schema).csv(S3_PATH)
 df = df.withColumn("error", lit(None).cast(StringType()))  # Initialize error column
 
-# Pivot Data to Wide Format (Price Table)
+# Pivot Data to Wide Format (Price Table). Pivoting using groupBy().pivot() allows restructuring of data efficiently.
 price_df = df.groupBy("date").pivot("id").agg(first("price"))
 for i in range(1,201):
     price_df = price_df.withColumnRenamed(f"{i}", f"stk_00{i}") # Rename columns
 price_df = price_df.withColumn("timestamp", current_timestamp())  # Add timestamp column
 
-# Pivot Data to Wide Format (Volume Table)
+# Pivot Data to Wide Format (Volume Table). Pivoting using groupBy().pivot() allows restructuring of data efficiently.
 volume_df = df.groupBy("date").pivot("id").agg(first("trade_volume"))
 for i in range(1,201):
     volume_df = volume_df.withColumnRenamed(f"{i}", f"stk_00{i}") # Rename columns
