@@ -17,7 +17,7 @@
 
 ## File Structure
 
-- StockETL/
+│ StockETL/
 │── lambda/
 │   │── trigger_emr.py  # Lambda function to trigger EMR job on S3 file drop
 │   │── monitor_emr.py   # Lambda function to monitor EMR job status
