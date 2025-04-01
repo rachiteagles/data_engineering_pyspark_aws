@@ -23,7 +23,7 @@
 │   │── monitor_emr.py   # Lambda function to monitor EMR job status
 │── spark_jobs/
 │   │── stock_etl.py     # PySpark ETL job script
-│── stocks/              # directory containing input files
+│── stocks/              # Directory containing input files
 │    │── input_1.csv    
 │    │── input_2.csv
 │    │── input_3.csv
