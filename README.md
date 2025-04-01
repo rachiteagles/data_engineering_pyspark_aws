@@ -19,12 +19,12 @@
 
 ```
 │── lambda/
-│   │── trigger_emr.py  # Lambda function to trigger EMR job on S3 file drop
+│   │── trigger_emr.py   # Lambda function to trigger EMR job on S3 file drop
 │   │── monitor_emr.py   # Lambda function to monitor EMR job status
 │── spark_jobs/
 │   │── stock_etl.py     # PySpark ETL job script
-│── stocks/
-│    │── input_1.csv
+│── stocks/              # directory containing input files
+│    │── input_1.csv    
 │    │── input_2.csv
 │    │── input_3.csv
 │    │── input_4.csv
