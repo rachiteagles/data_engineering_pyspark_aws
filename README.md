@@ -36,3 +36,32 @@
 │    │── input_10.csv
 │── README.md
 ```
+
+## Data Flow
+
+1. Data Ingestion (S3)
+- Stock data are uploaded as CSV files to an AWS S3 bucket.
+- AWS Lambda (trigger_emr.py) detects the new file drop event and triggers the AWS EMR cluster to process the data.
+
+2. Data Processing (AWS EMR + PySpark)
+- EMR runs the PySpark job (stock_etl.py) to: Read raw CSV files from input bucket
+- Perform data cleaning (handle missing values, remove duplicates)
+- Transform data into wide format (e.g., pivot tables with stock returns)
+- Compute stock returns based on price changes
+- Store cleaned and transformed data in rds database
+
+3. Job Monitoring (Lambda + CloudWatch)
+- AWS Lambda (monitor_emr.py) listens for CloudWatch Events related to EMR job status.
+- If EMR job fails, files are moved to failed s3 bucket for debugging.
+- If EMR job succeeds, files are moved to success s3 bucket.
+- In either case, file is delete from the input bucket
+
+4. Data Loading (PostgreSQL)
+- PySpark writes transformed stock data to an AWS RDS PostgreSQL database:
+- Stock Prices Table (prices)
+- Stock Returns Table (returns)
+- Stock Volume Table (volume)
+
+5. Logging and Monitoring
+- AWS CloudWatch logs EMR job execution details.
+- Pyspark logs are stored in logs bucket through EMR
